@@ -10,7 +10,10 @@ import Lifecycle from './pages/lifecycle/lifecycle'
 import Tstest from './pages/tstest/testest'
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 
+
+
 class App extends Component {
+
   render() {
     return (
       <div>
@@ -31,5 +34,5 @@ class App extends Component {
   }
 }
 
-
+declare const module: any; // 为了取消 ts报错
 export default hot(module)(App);
