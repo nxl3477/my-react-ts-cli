@@ -31,5 +31,5 @@ class App extends Component {
   }
 }
 
-
+declare const module: any; // 为了取消 ts报错
 export default hot(module)(App);

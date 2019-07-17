@@ -56,5 +56,14 @@ module.exports = {
     port: 8081,
     hot: true,
     host: "localhost",
+    overlay: true, // 编译出现错误时，将错误直接显示在页面上
+  },
+
+  // 输出的信息
+  stats:{
+    modules: false,
+    children: false,
+    chunks: false,
+    chunkModules: false
   }
 }
