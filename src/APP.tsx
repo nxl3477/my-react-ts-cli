@@ -9,24 +9,29 @@ import Reftest from './pages/ref/ref'
 import Errorfun from './pages/errrorfun/errorfun'
 import Lifecycle from './pages/lifecycle/lifecycle'
 
+// redux
+import {StoreContext} from 'redux-react-hook';
+import {store } from './store/store'
 
-
+// 参考模板  https://codesandbox.io/s/github/ianobermiller/redux-react-hook-example
 class App extends Component {
   render() {
     return (
       <div>
-        <BrowserRouter >
-          <Switch>
-            <Route exact path="/" component={TodoList}/>
-            <Route exact path="/sync" component={Sync} />
-            <Route exact path="/memo" component={Meno} />
-            <Route exact path="/context" component={Context} />
-            <Route exact path="/Reftest" component={Reftest} />
-            <Route exact path="/errorfun" component={Errorfun} />
-            <Route exact path="/lifecycle" component={Lifecycle} />
-            {/* <Route exact path="/tetest" component={Testest} /> */}
-          </Switch>
-        </BrowserRouter>
+        <StoreContext.Provider value={store}>
+          <BrowserRouter >
+            <Switch>
+              <Route exact path="/" component={TodoList}/>
+              <Route exact path="/sync" component={Sync} />
+              <Route exact path="/memo" component={Meno} />
+              <Route exact path="/context" component={Context} />
+              <Route exact path="/Reftest" component={Reftest} />
+              <Route exact path="/errorfun" component={Errorfun} />
+              <Route exact path="/lifecycle" component={Lifecycle} />
+              {/* <Route exact path="/tetest" component={Testest} /> */}
+            </Switch>
+          </BrowserRouter>
+        </StoreContext.Provider>
       </div>
     )
   }
