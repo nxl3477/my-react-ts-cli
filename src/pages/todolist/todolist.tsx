@@ -97,7 +97,7 @@ class TodoList extends React.PureComponent {
 
   render() {
     const { todoList } = this.state
-
+    console.log('🚀', this)
     return (
       <div className="wrap">
         <button onClick={() => this.pushHandle()}>Push操作</button>

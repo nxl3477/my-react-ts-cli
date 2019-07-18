@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { BrowserRouter, Switch, Route, Link, Provider } from "react-router-dom";
 import {hot} from 'react-hot-loader'; 
 import TodoList from './pages/todolist/todolist'
 import Sync from './pages/sync/sync'
@@ -7,8 +8,8 @@ import Context from './pages/context/context'
 import Reftest from './pages/ref/ref'
 import Errorfun from './pages/errrorfun/errorfun'
 import Lifecycle from './pages/lifecycle/lifecycle'
-import Tstest from './pages/tstest/testest'
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+
+
 
 class App extends Component {
   render() {
@@ -23,7 +24,7 @@ class App extends Component {
             <Route exact path="/Reftest" component={Reftest} />
             <Route exact path="/errorfun" component={Errorfun} />
             <Route exact path="/lifecycle" component={Lifecycle} />
-            <Route exact path="/tetest" component={Tstest} />
+            {/* <Route exact path="/tetest" component={Testest} /> */}
           </Switch>
         </BrowserRouter>
       </div>

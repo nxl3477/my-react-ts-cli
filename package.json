@@ -32,6 +32,7 @@
     "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.11.0",
     "react-hooks-fetch": "^0.9.0",
+    "react-hooks-redux": "^0.10.4",
     "react-hot-loader": "^4.8.3",
     "react-router-dom": "^5.0.0",
     "sass-loader": "^7.1.0",
