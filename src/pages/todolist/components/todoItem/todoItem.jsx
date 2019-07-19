@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
-
 class TodoItem extends Component {
   constructor(props) {
     super(props)
   }
-
-  // componentWillUpdate() {
-  //   console.log('我被更新了')
-  // }
-
   render() {
+    console.log('ok')
     return (
       <div>
         { this.props.thing }

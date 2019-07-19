@@ -14,5 +14,7 @@ export default function reducer(
       return { ...state, todoList: [ ...state.todoList, action.payload ] }
     case 'LESS_TODO':
       return { ...state, todoList: action.payload }
+    default:
+      return state;
   }
 }

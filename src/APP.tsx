@@ -11,8 +11,8 @@ import Lifecycle from './pages/lifecycle/lifecycle'
 
 // redux
 import {StoreContext} from 'redux-react-hook';
-import {store } from './store/store'
-
+import { makeStore } from './store/store'
+const store = makeStore()
 // 参考模板  https://codesandbox.io/s/github/ianobermiller/redux-react-hook-example
 class App extends Component {
   render() {
