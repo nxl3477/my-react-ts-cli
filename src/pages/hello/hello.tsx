@@ -10,7 +10,7 @@ export default class Hello extends React.Component<HellpProps> {
   render() {
     return (
       <div>
-        Hello worldasdasdasdasdasadasdasdasd
+        Hello world React-ts
       </div>
     )
   }
