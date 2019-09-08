@@ -1,18 +1,24 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const webpack = require('webpack');
+
+// const webpack = require('webpack');
 const { join } = require('path')
+const webpackMerge = require('webpack-merge')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const argv = require('yargs').argv
 
+// 映射到相对应的文件
+const configMap = {
+  'development': 'dev',
+  'production': 'prod'
+}
 
-module.exports = {
+// 引入对应的配置文件
+const mergeConfig = require(`./webpack.${configMap[argv.mode]}.js`)
+
+// 基础公共配置s
+const baseConfig = {
   entry: [ 
-    'react-hot-loader/patch', 
     join(__dirname, '../src/index.js') 
   ],
-  output: {
-    path: join(__dirname, '../dist'),
-    filename: "bundle-[hash].js"
-  },
   resolve: {
     extensions: ['.js', '.jsx', ".tsx"],
     alias: {
@@ -42,23 +48,11 @@ module.exports = {
     ] 
   },
   plugins: [
-    // new CleanWebpackPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({  // Also generate a test.html
       filename: 'index.html',
       template: join(__dirname, '../public/index.html')
     })
   ],
-  devServer: {
-    contentBase: require('path').join(__dirname, "../dist"),
-    compress: true,
-    port: 8081,
-    hot: true,
-    host: "localhost",
-    overlay: true, // 编译出现错误时，将错误直接显示在页面上
-  },
-
   // 输出的信息
   stats:{
     modules: false,
@@ -67,3 +61,6 @@ module.exports = {
     chunkModules: false
   }
 }
+
+// 合并配置
+module.exports = webpackMerge(baseConfig, mergeConfig)
