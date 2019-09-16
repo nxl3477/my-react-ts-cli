@@ -3,6 +3,7 @@
 const { join } = require('path')
 const webpackMerge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const argv = require('yargs').argv
 
 // 映射到相对应的文件
@@ -17,7 +18,7 @@ const mergeConfig = require(`./webpack.${configMap[argv.mode]}.js`)
 // 基础公共配置s
 const baseConfig = {
   entry: [ 
-    join(__dirname, '../src/index.js') 
+    join(__dirname, '../src/index.tsx') 
   ],
   resolve: {
     extensions: ['.js', '.jsx', ".tsx"],
@@ -29,21 +30,70 @@ const baseConfig = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.(scss|css)$/,
+        // 避免转换到依赖里面的样式
+        use: [ 
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // you can specify a publicPath here
+              // by default it uses publicPath in webpackOptions.output
+              publicPath: '../',
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          {
+            loader: "css-loader",
+            // 开启css module
+            // options: {
+            //   modules: true,
+            //   localIdentName: '[hash:base64:6]'
+            // }
+          }, 
+          "sass-loader"
+        ]
       },
       {
-        test: /\.scss$/,
-        use: [ "style-loader", "css-loader", "sass-loader" ]
+        test: /\.less$/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader",
+            // 开启css module
+            options: {
+              modules: true,
+              localIdentName: '[hash:base64:6]'
+            }
+          },
+          {
+            loader: "less-loader",
+            options: {
+              javascriptEnabled: true
+            },
+          }
+        ]
       },
       { 
-        test: /\.(js|jsx)$/,
+        test: /\.(js|jsx|ts(x?))$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        use: [ 
+          {
+            loader: 'babel-loader' ,
+            options: {
+              cacheDirectory: true
+            }
+          }
+        ]
       },
-      { 
-        test: /\.tsx?$/,
-        loader: ["ts-loader"]
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/,
+        // url loader 依赖 file-loader
+        loader: 'url-loader',
+        options: {
+          limit: 10000
+        }
       }
     ] 
   },
