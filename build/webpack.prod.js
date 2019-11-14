@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   output: {
@@ -23,7 +24,7 @@ module.exports = {
       ignoreOrder: false, // Enable to remove warnings about conflicting order
     }),
     // gzip
-    new CompressionWebpackPlugin(),
+    // new CompressionWebpackPlugin(),
     // 生成html
     new HtmlWebpackPlugin({  // Also generate a test.html
       filename: 'index.html',
@@ -31,7 +32,12 @@ module.exports = {
     })
   ],
   optimization: {
+    minimize: true,
     minimizer: [
+      // 压缩 js
+      new TerserPlugin({
+        extractComments: false,
+      }),
       // 压缩css
       new OptimizeCssAssetsPlugin()
     ],

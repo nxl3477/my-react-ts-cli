@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Button } from 'antd';
 
 interface HellpProps {
   name:string,
@@ -11,6 +12,7 @@ export default class Hello extends React.Component<HellpProps> {
     return (
       <div>
         Hello world React-ts
+        <Button >asdasdasd</Button>
       </div>
     )
   }

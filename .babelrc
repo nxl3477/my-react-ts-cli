@@ -15,6 +15,7 @@
     "@babel/plugin-transform-runtime",
     "@babel/plugin-proposal-class-properties", 
     "@babel/plugin-syntax-dynamic-import", 
-    "@babel/plugin-transform-react-jsx-self"
+    "@babel/plugin-transform-react-jsx-self",
+    ["import", { "libraryName": "antd", "libraryDirectory": "lib", "style": "css"}, "ant"]
   ]
 }
