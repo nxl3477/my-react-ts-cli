@@ -5,12 +5,89 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   output: {
     path: join(__dirname, '../dist'),
     filename: "[name]-[contenthash].js"
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(scss|css)$/,
+        // 避免转换到依赖里面的样式
+        use: [ 
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // you can specify a publicPath here
+              // by default it uses publicPath in webpackOptions.output
+              publicPath: '../',
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          {
+            loader: "css-loader",
+            // 开启css module
+            // options: {
+            //   modules: true,
+            //   localIdentName: '[hash:base64:6]'
+            // }
+          }, 
+          "sass-loader"
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          // 如果你css文件还不多就别加了
+          // {
+          //   loader: 'thread-loader'
+          // },
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader",
+            // 开启css module
+            options: {
+              modules: true,
+              localIdentName: '[hash:base64:6]'
+            }
+          },
+          {
+            loader: "less-loader",
+            options: {
+              javascriptEnabled: true
+            },
+          }
+        ]
+      },
+      {
+        test: /\.(js|jsx|ts(x?))$/,
+        // 因为在此处过滤掉了 node_modules, 所以如果不使用babel-plugin-import 就 antd 相关的代码不会被打包到项目
+        exclude: /node_modules/,
+        use: [ 
+          // {
+          // // 把这个 loader 放置在其他 loader 之前， 放置在这个 loader 之后的 loader 就会在一个单独的 worker 池(worker pool)中运行
+          // // --- 记录一下我测试的结果，因项目文件只有几个还比较少， 加上了 thread-loader, 平均只比没有加的时候快 300 毫秒  
+          //   loader: 'thread-loader'
+          // },
+          {
+            loader: "cache-loader"
+          },
+          {
+            loader: 'babel-loader' ,
+            options: {
+              // 缓存打包编译过的文件
+              cacheDirectory: true
+            }
+          }
+        ]
+      },
+    ]
   },
   plugins: [
     // 打包前清除缓存
@@ -29,7 +106,9 @@ module.exports = {
     new HtmlWebpackPlugin({  // Also generate a test.html
       filename: 'index.html',
       template: join(__dirname, '../public/index.html')
-    })
+    }),
+    // 开启dll缓存
+    new HardSourceWebpackPlugin()
   ],
   optimization: {
     minimize: true,
