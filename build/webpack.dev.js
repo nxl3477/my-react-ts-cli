@@ -1,4 +1,6 @@
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 module.exports = {
   entry: [ 
     // react热更新
@@ -7,14 +9,34 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(scss|css)$/,
-        // 避免转换到依赖里面的样式
-        use: [ 
+        test: /\.css$/,
+        use: [
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
               // you can specify a publicPath here
               // by default it uses publicPath in webpackOptions.output
+              publicPath: '../',
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          {
+            loader: "css-loader",
+            // 开启css module
+            options: {
+              // modules: true,
+              localIdentName: '[contenthash:base64:6]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.scss$/,
+        // 避免转换到依赖里面的样式
+        use: [ 
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
               publicPath: '../',
               hmr: process.env.NODE_ENV === 'development',
             },
@@ -34,14 +56,18 @@ module.exports = {
         test: /\.less$/,
         use: [
           {
-            loader: "style-loader"
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../',
+              hmr: process.env.NODE_ENV === 'development',
+            },
           },
           {
             loader: "css-loader",
             // 开启css module
             options: {
               modules: true,
-              localIdentName: '[hash:base64:6]'
+              localIdentName: '[contenthash:base64:6]'
             }
           },
           {
@@ -70,6 +96,13 @@ module.exports = {
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // all options are optional
+      filename: '[name]-[contenthash].css',
+      chunkFilename: '[name]-[id]-[contenthash].css',
+      ignoreOrder: false, // Enable to remove warnings about conflicting order
+    }),
 
   ],
   devServer: {

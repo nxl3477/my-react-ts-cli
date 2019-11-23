@@ -16,15 +16,30 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(scss|css)$/,
-        // 避免转换到依赖里面的样式
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          {
+            loader: "css-loader",
+            // 开启css module
+            options: {
+              // modules: true,
+              localIdentName: '[contenthash:base64:6]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.scss$/,
         use: [ 
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              // you can specify a publicPath here
-              // by default it uses publicPath in webpackOptions.output
-              publicPath: '../',
               hmr: process.env.NODE_ENV === 'development',
             },
           },
@@ -47,14 +62,17 @@ module.exports = {
           //   loader: 'thread-loader'
           // },
           {
-            loader: "style-loader"
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development',
+            }
           },
           {
             loader: "css-loader",
             // 开启css module
             options: {
               modules: true,
-              localIdentName: '[hash:base64:6]'
+              localIdentName: '[contenthash:base64:6]'
             }
           },
           {
@@ -63,7 +81,8 @@ module.exports = {
               javascriptEnabled: true
             },
           }
-        ]
+        ],
+        include: [/antd/]
       },
       {
         test: /\.(js|jsx|ts(x?))$/,
@@ -122,7 +141,7 @@ module.exports = {
     ],
     // 抽离运行时
     runtimeChunk: {
-      name: entrypoint => `runtimechunk~${entrypoint.name}`
+      name: entrypoint => `runtimechunk-${entrypoint.name}`
     },
     // code split
     splitChunks: {

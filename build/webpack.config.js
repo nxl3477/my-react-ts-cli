@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const { join } = require('path')
 const webpackMerge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const argv = require('yargs').argv
 
