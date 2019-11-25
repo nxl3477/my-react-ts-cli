@@ -22,10 +22,7 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
           },
           {
-            loader: "css-loader",
-            options: {
-              localIdentName: '[contenthash:base64:6]'
-            }
+            loader: "css-loader"
           },
           {
             loader: "postcss-loader",
@@ -40,9 +37,11 @@ module.exports = {
           },
           {
             loader: "css-loader",
-            options: {
-              localIdentName: '[contenthash:base64:6]'
-            }
+            // 默认关闭 css module 有需要自己把注释打开
+            // options: {
+            //   modules: true,
+            //   localIdentName: '[contenthash:base64:6]'
+            // }
           }, 
           {
             loader: "postcss-loader",
@@ -64,10 +63,7 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
           },
           {
-            loader: "css-loader",
-            options: {
-              localIdentName: '[contenthash:base64:6]'
-            }
+            loader: "css-loader"
           },
           {
             loader: "postcss-loader",
@@ -128,7 +124,7 @@ module.exports = {
       new TerserPlugin({
         extractComments: false,
       }),
-      // 压缩css (有cssnano了就不需要webpack 操心了，拜拜了您内 注释掉先)
+      // 压缩css
       // new OptimizeCssAssetsPlugin()
     ],
     // 抽离运行时

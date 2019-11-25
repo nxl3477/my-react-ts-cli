@@ -33,6 +33,11 @@ module.exports = {
           },
           {
             loader: "css-loader"
+            // 默认关闭 css module 有需要自己把注释打开
+            // options: {
+            //   modules: true,
+            //   localIdentName: '[contenthash:base64:6]'
+            // }
           },
           {
             loader: "sass-loader",
