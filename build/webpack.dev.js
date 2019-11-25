@@ -5,6 +5,12 @@ module.exports = {
     // react热更新
     'react-hot-loader/patch'
   ],
+  resolve: {
+    alias: {
+      // 解决控制台报错， 提示部分特性将无法使用的问题
+      'react-dom': '@hot-loader/react-dom'
+    }
+  },
   module: {
     rules: [
       {
