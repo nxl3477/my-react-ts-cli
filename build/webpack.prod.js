@@ -1,12 +1,12 @@
 // const webpack = require('webpack');
 const { join } = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   output: {
@@ -20,17 +20,15 @@ module.exports = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: process.env.NODE_ENV === 'development',
-            },
           },
           {
             loader: "css-loader",
-            // 开启css module
             options: {
-              // modules: true,
               localIdentName: '[contenthash:base64:6]'
             }
+          },
+          {
+            loader: "postcss-loader",
           }
         ]
       },
@@ -39,23 +37,24 @@ module.exports = {
         use: [ 
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: process.env.NODE_ENV === 'development',
-            },
           },
           {
             loader: "css-loader",
-            // 开启css module
-            // options: {
-            //   modules: true,
-            //   localIdentName: '[hash:base64:6]'
-            // }
+            options: {
+              localIdentName: '[contenthash:base64:6]'
+            }
           }, 
-          "sass-loader"
+          {
+            loader: "postcss-loader",
+          },
+          {
+            loader: "sass-loader",
+          }
         ]
       },
       {
         test: /\.less$/,
+        include: [/antd/],
         use: [
           // 如果你css文件还不多就别加了
           // {
@@ -63,17 +62,15 @@ module.exports = {
           // },
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: process.env.NODE_ENV === 'development',
-            }
           },
           {
             loader: "css-loader",
-            // 开启css module
             options: {
-              modules: true,
               localIdentName: '[contenthash:base64:6]'
             }
+          },
+          {
+            loader: "postcss-loader",
           },
           {
             loader: "less-loader",
@@ -81,8 +78,7 @@ module.exports = {
               javascriptEnabled: true
             },
           }
-        ],
-        include: [/antd/]
+        ]
       },
       {
         test: /\.(js|jsx|ts(x?))$/,
@@ -109,22 +105,18 @@ module.exports = {
     ]
   },
   plugins: [
+    // 分析打包的依赖包大小关系
+    // new BundleAnalyzerPlugin(),
+    // gzip
+    // new CompressionWebpackPlugin(),
+
     // 打包前清除缓存
     new CleanWebpackPlugin(),
     // 抽离 css
     new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // all options are optional
       filename: '[name]-[contenthash].css',
       chunkFilename: '[name]-[id]-[contenthash].css',
-      ignoreOrder: false, // Enable to remove warnings about conflicting order
-    }),
-    // gzip
-    // new CompressionWebpackPlugin(),
-    // 生成html
-    new HtmlWebpackPlugin({  // Also generate a test.html
-      filename: 'index.html',
-      template: join(__dirname, '../public/index.html')
+      ignoreOrder: false
     }),
     // 开启dll缓存
     new HardSourceWebpackPlugin()
@@ -136,8 +128,8 @@ module.exports = {
       new TerserPlugin({
         extractComments: false,
       }),
-      // 压缩css
-      new OptimizeCssAssetsPlugin()
+      // 压缩css (有cssnano了就不需要webpack 操心了，拜拜了您内 注释掉先)
+      // new OptimizeCssAssetsPlugin()
     ],
     // 抽离运行时
     runtimeChunk: {
@@ -161,7 +153,7 @@ module.exports = {
         common: {
           // name: "common",
           chunks: "all",
-          minSize: 1,
+          minSize: 3,
           priority: 0
         },
         // 首先: 打包node_modules中的文件

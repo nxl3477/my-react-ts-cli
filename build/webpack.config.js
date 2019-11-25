@@ -21,7 +21,7 @@ const baseConfig = {
     join(__dirname, '../src/index.tsx') 
   ],
   resolve: {
-    extensions: ['.js', '.jsx', ".tsx"],
+    extensions: ['.js', '.jsx', ".tsx", ".ts"],
     alias: {
       '@': join(__dirname, '../src'),
     }

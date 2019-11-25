@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: [ 
@@ -12,21 +11,10 @@ module.exports = {
         test: /\.css$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              // you can specify a publicPath here
-              // by default it uses publicPath in webpackOptions.output
-              publicPath: '../',
-              hmr: process.env.NODE_ENV === 'development',
-            },
+            loader: 'style-loader'
           },
           {
-            loader: "css-loader",
-            // 开启css module
-            options: {
-              // modules: true,
-              localIdentName: '[contenthash:base64:6]'
-            }
+            loader: "css-loader"
           }
         ]
       },
@@ -35,40 +23,24 @@ module.exports = {
         // 避免转换到依赖里面的样式
         use: [ 
           {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: '../',
-              hmr: process.env.NODE_ENV === 'development',
-            },
+            loader: 'style-loader'
           },
           {
-            loader: "css-loader",
-            // 开启css module
-            // options: {
-            //   modules: true,
-            //   localIdentName: '[hash:base64:6]'
-            // }
-          }, 
-          "sass-loader"
+            loader: "css-loader"
+          },
+          {
+            loader: "sass-loader",
+          }
         ]
       },
       {
         test: /\.less$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: '../',
-              hmr: process.env.NODE_ENV === 'development',
-            },
+            loader: 'style-loader'
           },
           {
-            loader: "css-loader",
-            // 开启css module
-            options: {
-              modules: true,
-              localIdentName: '[contenthash:base64:6]'
-            }
+            loader: "css-loader"
           },
           {
             loader: "less-loader",
@@ -95,15 +67,7 @@ module.exports = {
   },
   plugins: [
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // all options are optional
-      filename: '[name]-[contenthash].css',
-      chunkFilename: '[name]-[id]-[contenthash].css',
-      ignoreOrder: false, // Enable to remove warnings about conflicting order
-    }),
-
+    new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
     contentBase: require('path').join(__dirname, "../dist"),
