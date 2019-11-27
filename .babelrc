@@ -2,15 +2,31 @@
   "presets": [ 
     "@babel/preset-react", 
     [
-      "@babel/preset-env"
+      "@babel/preset-env", {
+        // 将 ES6 module 转换为其他模块规范，可选 "adm" | "umd" | "systemjs" | "commonjs" | "cjs" | false，默认为 false
+        "modules": false,
+        // 根据项目使用和浏览器target 按需使用polyfill
+        "useBuiltIns": "usage",
+        // 仅当与useBuiltIns: usage或一起使用时有效果
+        "corejs": 3
+      }
     ],
     "@babel/typescript"
   ],
   "plugins": [
+    // 解决装饰器
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    // - 当使用 ```generators/async ```的时候自动引入 ```@babel/runtime/regenerator ```。
+    // - 为新特性的API添加实现。
+    // - 提取每个模块内联的helper们问引用。
     "@babel/plugin-transform-runtime",
-    "@babel/plugin-proposal-class-properties", 
+    // 解决class 的 this 指向问题
+    "@babel/plugin-proposal-class-properties",
+    // 用以解析识别import()动态导入语法
     "@babel/plugin-syntax-dynamic-import", 
+    // 添加 __self 作为props 到 jsx 元素上， react 会根据次作出一些警告
     "@babel/plugin-transform-react-jsx-self",
+    // 按需引入
     ["import", { "libraryName": "antd", "libraryDirectory": "lib", "style": "css"}, "ant"]
   ]
 }
