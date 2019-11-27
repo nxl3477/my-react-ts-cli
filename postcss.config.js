@@ -5,12 +5,7 @@ module.exports = {
      //全球有超过5%的人使用的浏览器  配置地址: https://github.com/browserslist/browserslist#queries
     require('postcss-preset-env')({
       // 处理 grid 布局在 IE 10-11前缀
-      autoprefixer: { grid: true },
-      browsers: [
-        "> 1%",     //全球有超过1%的人使用的浏览器
-        "last 10 versions", // 每个浏览器最后10个版本
-        "not ie <= 8"  // 兼容不小于 ie8
-      ]
+      autoprefixer: { grid: true }
     }),
     // 自动合并 @import 加载的css 文件（目前不知道会不会和 code split 冲突 待观察）
     require('postcss-import')(),
